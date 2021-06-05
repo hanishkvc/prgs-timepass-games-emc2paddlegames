@@ -40,7 +40,10 @@
 
 
 		function update_status(msg) {
-			gStatus.textContent = `L${gLevel}:${gPoints}: ${msg}`;
+			if (gSpecialZone === -1)
+				gStatus.textContent = `L${gLevel}:${gPoints}: ${msg}`;
+			else
+				gStatus.textContent = `L${gLevel}:${gPoints}:${gZoneTime2Live}: ${msg}`;
 		}
 
 
