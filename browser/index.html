@@ -14,6 +14,7 @@
 			<p id="status"> Save Nature Save Earth </p>
 		</div>
 	<script>
+		var gTimer;
 		var gStatus;
 		var gCanvas;
 		var gCtxt;
@@ -49,7 +50,8 @@
 				update_status("INFO: Ball reached bottom");
 				bD = bX - pX;
 				if (Math.abs(bD) > pXAdj) {
-					update_status(`Oops:Dropped the ball ${bD}`);
+					update_status(`Oops:Dropped the ball ${bD}, refresh to start over`);
+					clearInterval(gTimer);
 				} else {
 					update_status(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
@@ -66,6 +68,10 @@
 			if ((bY < 0) && (bYD < 0)) {
 				update_status("INFO: Ball reached top");
 				bYD = -1*bYD;
+			}
+			if ((bX < 0) || (bX > gCanvas.width)) {
+				update_status("Yeh Kya uha..., refresh to start over");
+				clearInterval(gTimer);
 			}
 			display_me();
 		}
@@ -90,7 +96,7 @@
 			bY = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
-			setInterval(next_frame, 50);
+			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
 		}
 
