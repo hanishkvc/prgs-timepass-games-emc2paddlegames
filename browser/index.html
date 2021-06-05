@@ -18,17 +18,38 @@
 		var gVideo;
 		var gCanvas;
 		var gCtxt;
+		var bX, bY;
+		const bW = 20;
+		const bH = 20;
+		const bD = 2;
+
+
+		function display_me() {
+			gCtxt.fillStyle = "#208080";
+			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
+			gCtxt.fillStyle = "#802020";
+			gCtxt.fillRect(bX, bY, bW, bH);
+		}
+
+
+		function next_frame() {
+			bY += bD;
+			display_me();
+		}
 
 
 		function init_me() {
 			gVideo = document.getElementById("video");
 			gCanvas = document.getElementById("canvas");
 			gCtxt = gCanvas.getContext("2d");
+			bX = Math.random()*gCanvas.width;
+			bY = 0;
 		}
 
 
 		document.addEventListener("DOMContentLoaded", (ev) => {
 			init_me();
+			setInterval(next_frame, 50);
 		});
 	</script>
 
