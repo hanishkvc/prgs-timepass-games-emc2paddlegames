@@ -46,8 +46,9 @@
 				console.log("INFO: Ball reached bottom");
 				bD = bX - pX;
 				if (Math.abs(bD) > pXAdj) {
-					console.log("Oops: Dropped the ball");
+					console.log(`Oops:Dropped the ball ${bD}`);
 				} else {
+					console.log(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
 				}
 			}
