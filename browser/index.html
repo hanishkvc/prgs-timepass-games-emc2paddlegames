@@ -37,9 +37,12 @@
 
 
 		function display_me() {
-			gCtxt.fillStyle = "#208080";
+			gCtxt.fillStyle = "#20D0D0";
 			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
-			gCtxt.fillStyle = "#802020";
+			if (gRepeat === 0)
+				gCtxt.fillStyle = "#D0D020";
+			else
+				gCtxt.fillStyle = "#802020";
 			gCtxt.fillRect(bX-bXAdj, bY, bW, bH);
 			gCtxt.fillStyle = "#202020";
 			gCtxt.fillRect(pX-pXAdj, pY, pW, pH);
@@ -79,13 +82,16 @@
 						if (gRepeat < 0) {
 							bXD = 0.5 - Math.random();
 							update_status("Run kid run...");
-							bYD *= 2;
+							bYD *= 1.3;
 							gRepeat = LAZY_REPEAT;
 						}
-					} else if (bD > 0) {
-						bXD = 0.4;
 					} else {
-						bXD = -0.4;
+						gRepeat = LAZY_REPEAT;
+						if (bD > 0) {
+							bXD = 0.4;
+						} else {
+							bXD = -0.4;
+						}
 					}
 				}
 			}
