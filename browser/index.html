@@ -12,7 +12,7 @@
 		</div>
 		<hr>
 		<div id="main">
-			<canvas id="canvas" width=640> What Canvas??? No no no noo noo noooooo </canvas>
+			<canvas id="canvas" width=640 height=240> What Canvas??? No no no noo noo noooooo </canvas>
 		</div>
 		<hr>
 		<div id="controls">
@@ -51,6 +51,7 @@
 		var gZoneX1, gZoneX2, gZoneWidth;
 		const ZONE_TIME2LIVE = 1024;
 		var gZoneTime2Live;
+		var gDispMid;
 
 
 		function update_status(msg) {
@@ -170,14 +171,28 @@
 		}
 
 
-		function handle_key(ev) {
-			if (ev.key === "ArrowLeft") {
+		function move_paddle(loc) {
+			if (loc < gDispMid){
 				pX -= pD;
 				if (pX <= 0) pX = 0;
-			} else if (ev.key === "ArrowRight") {
+			} else {
 				pX += pD;
 				if (pX >= gCanvas.width) pX = gCanvas.width;
 			}
+		}
+
+
+		function handle_key(ev) {
+			if (ev.key === "ArrowLeft") {
+				move_paddle(0);
+			} else if (ev.key === "ArrowRight") {
+				move_paddle(gCanvas.width);
+			}
+		}
+
+
+		function handle_click(ev) {
+			move_paddle(ev.offsetX);
 		}
 
 
@@ -193,6 +208,8 @@
 			gZoneWidth = gCanvas.width/10;
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
+			gDispMid = gCanvas.width/2;
+			gCanvas.onclick = handle_click;
 		}
 
 
