@@ -41,10 +41,12 @@
 		function next_frame() {
 			bY += bYD;
 			bX += bXD;
-			if ((bY - pY) < pH) {
+			if ((pY - bY) < pH) {
+				console.log("INFO: Ball reached bottom");
 				bYD = -1*bYD;
 			}
-			if ((bY < bH) && (bYD < 0)) {
+			if ((bY < 0) && (bYD < 0)) {
+				console.log("INFO: Ball reached top");
 				bYD = -1*bYD;
 			}
 			display_me();
