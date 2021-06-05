@@ -23,6 +23,7 @@
 		const bW = 20;
 		const bH = 20;
 		var bXD = 0, bYD = 2;
+		const bXAdj = Math.round(bW/2, 0);
 		var pX, bY;
 		const pW = 40, pH = 5, pD = 10;
 		const pXAdj = Math.round(pW/2, 0);
@@ -32,7 +33,7 @@
 			gCtxt.fillStyle = "#208080";
 			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
 			gCtxt.fillStyle = "#802020";
-			gCtxt.fillRect(bX, bY, bW, bH);
+			gCtxt.fillRect(bX-bXAdj, bY, bW, bH);
 			gCtxt.fillStyle = "#202020";
 			gCtxt.fillRect(pX-pXAdj, pY, pW, pH);
 		}
@@ -43,7 +44,12 @@
 			bX += bXD;
 			if ((pY - bY) < pH) {
 				console.log("INFO: Ball reached bottom");
-				bYD = -1*bYD;
+				bD = bX - pX;
+				if (Math.abs(bD) > pXAdj) {
+					console.log("Oops: Dropped the ball");
+				} else {
+					bYD = -1*bYD;
+				}
 			}
 			if ((bY < 0) && (bYD < 0)) {
 				console.log("INFO: Ball reached top");
