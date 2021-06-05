@@ -11,10 +11,12 @@
 			<canvas id="canvas" width=640> What Canvas??? No no no noo noo noooooo </canvas>
 		</div>
 		<div id="controls">
+			<p id="score"> </p>
 			<p id="status"> Save Nature Save Earth </p>
 		</div>
 	<script>
 		var gTimer;
+		var gScore;
 		var gStatus;
 		var gCanvas;
 		var gCtxt;
@@ -41,9 +43,10 @@
 
 		function update_status(msg) {
 			if (gSpecialZone === -1)
-				gStatus.textContent = `L${gLevel}:${gPoints}: ${msg}`;
+				gScore.textContent = `L${gLevel} : P${gPoints}`;
 			else
-				gStatus.textContent = `L${gLevel}:${gPoints}:${gZoneTime2Live}: ${msg}`;
+				gScore.textContent = `L${gLevel} : P${gPoints} : T2L ${gZoneTime2Live}`;
+			gStatus.textContent = msg;
 		}
 
 
@@ -168,6 +171,7 @@
 
 		function init_me() {
 			gStatus = document.getElementById("status");
+			gScore = document.getElementById("score");
 			gCanvas = document.getElementById("canvas");
 			gCtxt = gCanvas.getContext("2d");
 			bX = Math.random()*gCanvas.width;
