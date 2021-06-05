@@ -26,6 +26,7 @@
 		var pX, bY;
 		const pW = 40, pH = 5, pD = 10;
 		const pXAdj = Math.round(pW/2, 0);
+		var gArcRad = 10;
 
 
 		function update_status(msg) {
@@ -43,6 +44,15 @@
 		}
 
 
+		function arc_out() {
+			gCtxt.beginPath()
+			gCtxt.arc(bX,bY,gArcRad,0,1.6,true);
+			gArcRad += 5;
+			gCtxt.stroke()
+			if (gArcRad > 100) clearInterval(gTimer);
+		}
+
+
 		function next_frame() {
 			bY += bYD;
 			bX += bXD;
@@ -52,6 +62,7 @@
 				if (Math.abs(bD) > pXAdj) {
 					update_status(`Oops:Dropped the ball ${bD}, refresh to start over`);
 					clearInterval(gTimer);
+					gTimer = setInterval(arc_out, 50);
 				} else {
 					update_status(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
