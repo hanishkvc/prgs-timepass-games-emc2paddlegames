@@ -13,3 +13,9 @@ it scratch or pygame or swift or browser-javascript or ...
 
 And to provide some time pass, once in a bluemoon.
 
+One can run this on a desktop/laptop by going to
+
+https://hanishkvc.github.io/prgs-timepass-games-emc2paddlegames/browser/
+
+The index.html itself contains the ui and the logic.
+
