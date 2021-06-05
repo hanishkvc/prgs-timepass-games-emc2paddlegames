@@ -34,6 +34,7 @@
 		var POINTS_NEXTLEVEL = 4;
 		var gPoints = 0;
 		var gSpecialZone = -1;
+		var gZoneX1, gZoneX2, gZoneWidth;
 
 
 		function update_status(msg) {
@@ -44,7 +45,7 @@
 		function display_zones() {
 			if (gSpecialZone > 0) {
 				gCtxt.fillStyle = "#208020";
-				gCtxt.fillRect(gSpecialZone, 0, gCanvas.width/10, gCanvas.height);
+				gCtxt.fillRect(gSpecialZone, 0, gZoneWidth, gCanvas.height);
 			}
 		}
 
@@ -83,6 +84,8 @@
 			POINTS_NEXTLEVEL *= 2;
 			if (Math.random() > 0.5) {
 				gSpecialZone = Math.random()*gCanvas.width;
+				gZoneX1 = gSpecialZone - (gZoneWidth/2);
+				gZoneX2 = gSpecialZone + (gZoneWidth/2);
 			} else {
 				gSpecialZone = -1;
 			}
@@ -131,6 +134,9 @@
 				update_status("Yeh Kya uha..., refresh to start over");
 				clearInterval(gTimer);
 			}
+			if (gSpecialZone >= 0) {
+				if ((gZoneX1 < bX) && (bX < gZoneX2)) gPoints += POINTS_NORMAL;
+			}
 			display_me();
 		}
 
@@ -154,6 +160,7 @@
 			bY = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
+			gZoneWidth = gCanvas.width/10;
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
 		}
