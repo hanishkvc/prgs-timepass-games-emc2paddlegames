@@ -1,22 +1,20 @@
 <html>
 	<head>
-		<title> Secured Photos </title>
-		<withloveto> Shreya, Kunju, Nanda, Chinnu </withloveto>
+		<title> E=MC^2 of Paddle Games </title>
 	</head>
 	<body>
 		<div id="top">
-		<h2> Secured Photos </h2>
+		<h2> E=MC^2 of Paddle Games </h2>
+		<withloveto> Thanks for all the pizzas!!! Shreya, Kunju, Nanda, Chinnu </withloveto>
 		</div>
 		<div id="main">
-			<video id="video" width=320>
-				Video/Image capture not supported on this Browser.
-			</video>
-			<canvas id="canvas"></canvas>
+			<canvas id="canvas"> What Canvas??? No no no noo noo noooooo </canvas>
 		</div>
 		<div id="controls">
+			<p id="status"> Save Nature Save Earth </p>
 		</div>
 	<script>
-		var gVideo;
+		var gStatus;
 		var gCanvas;
 		var gCtxt;
 		var bX, bY;
@@ -27,6 +25,11 @@
 		var pX, bY;
 		const pW = 40, pH = 5, pD = 10;
 		const pXAdj = Math.round(pW/2, 0);
+
+
+		function update_status(msg) {
+			gStatus.textContent = msg;
+		}
 
 
 		function display_me() {
@@ -43,12 +46,12 @@
 			bY += bYD;
 			bX += bXD;
 			if ((pY - bY) < pH) {
-				console.log("INFO: Ball reached bottom");
+				update_status("INFO: Ball reached bottom");
 				bD = bX - pX;
 				if (Math.abs(bD) > pXAdj) {
-					console.log(`Oops:Dropped the ball ${bD}`);
+					update_status(`Oops:Dropped the ball ${bD}`);
 				} else {
-					console.log(`INFO:Byalalu, ball has contacted paddle ${bD}`);
+					update_status(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
@@ -61,7 +64,7 @@
 				}
 			}
 			if ((bY < 0) && (bYD < 0)) {
-				console.log("INFO: Ball reached top");
+				update_status("INFO: Ball reached top");
 				bYD = -1*bYD;
 			}
 			display_me();
@@ -80,7 +83,7 @@
 
 
 		function init_me() {
-			gVideo = document.getElementById("video");
+			gStatus = document.getElementById("status");
 			gCanvas = document.getElementById("canvas");
 			gCtxt = gCanvas.getContext("2d");
 			bX = Math.random()*gCanvas.width;
