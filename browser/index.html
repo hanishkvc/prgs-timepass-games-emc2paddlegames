@@ -33,6 +33,7 @@
 		const POINTS_NORMAL = 1;
 		var POINTS_NEXTLEVEL = 4;
 		var gPoints = 0;
+		var gSpecialZone = -1;
 
 
 		function update_status(msg) {
@@ -40,9 +41,18 @@
 		}
 
 
+		function display_zones() {
+			if (gSpecialZone > 0) {
+				gCtxt.fillStyle = "#208020";
+				gCtxt.fillRect(gSpecialZone, 0, gCanvas.width/10, gCanvas.height);
+			}
+		}
+
+
 		function display_me() {
 			gCtxt.fillStyle = "#20D0D0";
 			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
+			display_zones();
 			if (gRepeat === 0)
 				gCtxt.fillStyle = "#D0D020";
 			else
@@ -71,6 +81,11 @@
 			gLevel += 1;
 			gPoints += POINTS_NEXTLEVEL;
 			POINTS_NEXTLEVEL *= 2;
+			if (Math.random() > 0.5) {
+				gSpecialZone = Math.random()*gCanvas.width;
+			} else {
+				gSpecialZone = -1;
+			}
 		}
 
 
@@ -78,15 +93,15 @@
 			bY += bYD;
 			bX += bXD;
 			if ((pY - bY) < pH) {
-				update_status("INFO: Ball reached bottom");
+				//update_status("INFO: Ball reached bottom");
 				bD = bX - pX;
 				if (Math.abs(bD) > pXAdj) {
 					update_status(`Oops:Dropped the ball ${bD}, refresh to start over`);
 					clearInterval(gTimer);
 					gTimer = setInterval(arc_out, 100);
 				} else {
-					update_status(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					gPoints += POINTS_NORMAL;
+					update_status(`INFO:Byalalu, contact established with ball ${bD}`);
 					bYD = -1*bYD;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
@@ -109,7 +124,7 @@
 				}
 			}
 			if ((bY < 0) && (bYD < 0)) {
-				update_status("INFO: Ball reached top");
+				//update_status("INFO: Ball reached top");
 				bYD = -1*bYD;
 			}
 			if ((bX < 0) || (bX > gCanvas.width)) {
