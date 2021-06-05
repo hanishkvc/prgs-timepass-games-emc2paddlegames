@@ -22,6 +22,8 @@
 		const bW = 20;
 		const bH = 20;
 		const bD = 2;
+		var pX, bY;
+		const pW = 40, pH = 5, pD = 5;
 
 
 		function display_me() {
@@ -29,6 +31,8 @@
 			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
 			gCtxt.fillStyle = "#802020";
 			gCtxt.fillRect(bX, bY, bW, bH);
+			gCtxt.fillStyle = "#202020";
+			gCtxt.fillRect(pX, pY, pW, pH);
 		}
 
 
@@ -44,6 +48,8 @@
 			gCtxt = gCanvas.getContext("2d");
 			bX = Math.random()*gCanvas.width;
 			bY = 0;
+			pX = Math.random()*gCanvas.width;
+			pY = gCanvas.height-10;
 		}
 
 
