@@ -30,7 +30,8 @@
 		const LAZY_REPEAT = 2;
 		var gRepeat = LAZY_REPEAT;
 		var gLevel = 1;
-		const POINTS_NORMAL=1, POINTS_NEXTLEVEL=4;
+		const POINTS_NORMAL = 1;
+		var POINTS_NEXTLEVEL = 4;
 		var gPoints = 0;
 
 
@@ -62,6 +63,17 @@
 		}
 
 
+		function next_level() {
+			bXD = 0.5 - Math.random();
+			update_status("NextLevel, Run kid run...");
+			bYD *= 1.3;
+			gRepeat = LAZY_REPEAT;
+			gLevel += 1;
+			gPoints += POINTS_NEXTLEVEL;
+			POINTS_NEXTLEVEL *= 2;
+		}
+
+
 		function next_frame() {
 			bY += bYD;
 			bX += bXD;
@@ -84,13 +96,7 @@
 							update_status("ALERT: Meteriot on the way...");
 						}
 						if (gRepeat < 0) {
-							bXD = 0.5 - Math.random();
-							update_status("Run kid run...");
-							bYD *= 1.3;
-							gRepeat = LAZY_REPEAT;
-							gLevel += 1;
-							gPoints += POINTS_NEXTLEVEL;
-							POINTS_NEXTLEVEL *= 2;
+							next_level();
 						}
 					} else {
 						gRepeat = LAZY_REPEAT;
