@@ -30,7 +30,7 @@
 		const LAZY_REPEAT = 2;
 		var gRepeat = LAZY_REPEAT;
 		var gLevel = 1;
-		const POINTS_NORMAL=1, POINTS_NEXTLEVEL=10;
+		const POINTS_NORMAL=1, POINTS_NEXTLEVEL=4;
 		var gPoints = 0;
 
 
@@ -90,6 +90,7 @@
 							gRepeat = LAZY_REPEAT;
 							gLevel += 1;
 							gPoints += POINTS_NEXTLEVEL;
+							POINTS_NEXTLEVEL *= 2;
 						}
 					} else {
 						gRepeat = LAZY_REPEAT;
