@@ -22,7 +22,7 @@
 		var bX, bY;
 		const bW = 20;
 		const bH = 20;
-		const bD = 2;
+		var bXD = 0, bYD = 2;
 		var pX, bY;
 		const pW = 40, pH = 5, pD = 10;
 		const pXAdj = Math.round(pW/2, 0);
@@ -39,7 +39,14 @@
 
 
 		function next_frame() {
-			bY += bD;
+			bY += bYD;
+			bX += bXD;
+			if ((bY - pY) < pH) {
+				bYD = -1*bYD;
+			}
+			if ((bY < bH) && (bYD < 0)) {
+				bYD = -1*bYD;
+			}
 			display_me();
 		}
 
