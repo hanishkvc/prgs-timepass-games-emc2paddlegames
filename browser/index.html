@@ -1,0 +1,36 @@
+<html>
+	<head>
+		<title> Secured Photos </title>
+	</head>
+	<body>
+		<div id="top">
+		<h2> Secured Photos </h2>
+		</div>
+		<div id="main">
+			<video id="video" width=320>
+				Video/Image capture not supported on this Browser.
+			</video>
+			<canvas id="canvas"></canvas>
+		</div>
+		<div id="controls">
+		</div>
+	<script>
+		var gVideo;
+		var gCanvas;
+		var gCtxt;
+
+
+		function init_me() {
+			gVideo = document.getElementById("video");
+			gCanvas = document.getElementById("canvas");
+			gCtxt = gCanvas.getContext("2d");
+		}
+
+
+		document.addEventListener("DOMContentLoaded", (ev) => {
+			init_me();
+		});
+	</script>
+
+	</body>
+</html>
