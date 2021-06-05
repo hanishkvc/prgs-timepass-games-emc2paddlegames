@@ -46,9 +46,10 @@
 
 		function arc_out() {
 			gCtxt.beginPath()
-			gCtxt.arc(bX,bY,gArcRad,0,1.6,true);
+			gCtxt.arc(bX,bY,gArcRad,0,3.14,true);
 			gArcRad += 5;
-			gCtxt.stroke()
+			gCtxt.fillStyle=`rgb( ${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256})`;
+			gCtxt.fill()
 			if (gArcRad > 100) clearInterval(gTimer);
 		}
 
@@ -62,7 +63,7 @@
 				if (Math.abs(bD) > pXAdj) {
 					update_status(`Oops:Dropped the ball ${bD}, refresh to start over`);
 					clearInterval(gTimer);
-					gTimer = setInterval(arc_out, 50);
+					gTimer = setInterval(arc_out, 100);
 				} else {
 					update_status(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
