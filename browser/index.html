@@ -50,6 +50,11 @@
 				} else {
 					console.log(`INFO:Byalalu, ball has contacted paddle ${bD}`);
 					bYD = -1*bYD;
+					if (bD > 0) {
+						bXD = 1;
+					} else {
+						bXD = -1;
+					}
 				}
 			}
 			if ((bY < 0) && (bYD < 0)) {
