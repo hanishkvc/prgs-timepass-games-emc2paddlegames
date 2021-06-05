@@ -35,6 +35,8 @@
 		var gPoints = 0;
 		var gSpecialZone = -1;
 		var gZoneX1, gZoneX2, gZoneWidth;
+		const ZONE_TIME2LIVE = 1024;
+		var gZoneTime2Live;
 
 
 		function update_status(msg) {
@@ -44,6 +46,11 @@
 
 		function display_zones() {
 			if (gSpecialZone > 0) {
+				gZoneTime2Live -= 1;
+				if (gZoneTime2Live < 0) {
+					gSpecialZone = -1;
+					return;
+				}
 				gCtxt.fillStyle = "#208020";
 				gCtxt.fillRect(gZoneX1, 0, gZoneWidth, gCanvas.height);
 			}
@@ -86,6 +93,7 @@
 				gSpecialZone = Math.random()*gCanvas.width;
 				gZoneX1 = gSpecialZone - (gZoneWidth/2);
 				gZoneX2 = gSpecialZone + (gZoneWidth/2);
+				gZoneTime2Live = ZONE_TIME2LIVE;
 			} else {
 				gSpecialZone = -1;
 			}
