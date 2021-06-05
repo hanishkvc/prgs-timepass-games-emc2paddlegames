@@ -78,10 +78,10 @@
 			bXD = 0.5 - Math.random();
 			gPoints += POINTS_NEXTLEVEL;
 			POINTS_NEXTLEVEL *= 2;
+			gLevel += 1;
 			update_status("NextLevel, Run kid run...");
 			bYD *= 1.3;
 			gRepeat = LAZY_REPEAT;
-			gLevel += 1;
 			if (Math.random() > 0.5) {
 				gSpecialZone = Math.random()*gCanvas.width;
 				gZoneX1 = gSpecialZone - (gZoneWidth/2);
