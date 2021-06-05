@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title> Secured Photos </title>
+		<withloveto> Shreya, Kunju, Nanda, Chinnu </withloveto>
 	</head>
 	<body>
 		<div id="top">
@@ -23,7 +24,8 @@
 		const bH = 20;
 		const bD = 2;
 		var pX, bY;
-		const pW = 40, pH = 5, pD = 5;
+		const pW = 40, pH = 5, pD = 10;
+		const pXAdj = Math.round(pW/2, 0);
 
 
 		function display_me() {
@@ -32,13 +34,24 @@
 			gCtxt.fillStyle = "#802020";
 			gCtxt.fillRect(bX, bY, bW, bH);
 			gCtxt.fillStyle = "#202020";
-			gCtxt.fillRect(pX, pY, pW, pH);
+			gCtxt.fillRect(pX-pXAdj, pY, pW, pH);
 		}
 
 
 		function next_frame() {
 			bY += bD;
 			display_me();
+		}
+
+
+		function handle_key(ev) {
+			if (ev.key === "ArrowLeft") {
+				pX -= pD;
+				if (pX <= 0) pX = 0;
+			} else if (ev.key === "ArrowRight") {
+				pX += pD;
+				if (pX >= gCanvas.width) pX = gCanvas.width;
+			}
 		}
 
 
@@ -50,12 +63,13 @@
 			bY = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
+			setInterval(next_frame, 50);
+			window.onkeydown = handle_key;
 		}
 
 
 		document.addEventListener("DOMContentLoaded", (ev) => {
 			init_me();
-			setInterval(next_frame, 50);
 		});
 	</script>
 
