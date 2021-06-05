@@ -45,7 +45,7 @@
 		function display_zones() {
 			if (gSpecialZone > 0) {
 				gCtxt.fillStyle = "#208020";
-				gCtxt.fillRect(gSpecialZone, 0, gZoneWidth, gCanvas.height);
+				gCtxt.fillRect(gZoneX1, 0, gZoneWidth, gCanvas.height);
 			}
 		}
 
@@ -76,12 +76,12 @@
 
 		function next_level() {
 			bXD = 0.5 - Math.random();
+			gPoints += POINTS_NEXTLEVEL;
+			POINTS_NEXTLEVEL *= 2;
 			update_status("NextLevel, Run kid run...");
 			bYD *= 1.3;
 			gRepeat = LAZY_REPEAT;
 			gLevel += 1;
-			gPoints += POINTS_NEXTLEVEL;
-			POINTS_NEXTLEVEL *= 2;
 			if (Math.random() > 0.5) {
 				gSpecialZone = Math.random()*gCanvas.width;
 				gZoneX1 = gSpecialZone - (gZoneWidth/2);
@@ -135,7 +135,10 @@
 				clearInterval(gTimer);
 			}
 			if (gSpecialZone >= 0) {
-				if ((gZoneX1 < bX) && (bX < gZoneX2)) gPoints += POINTS_NORMAL;
+				if ((gZoneX1 < bX) && (bX < gZoneX2)) {
+					gPoints += POINTS_NORMAL;
+					update_status("INFO: lucky you");
+				}
 			}
 			display_me();
 		}
