@@ -205,6 +205,8 @@
 			gStatus = document.getElementById("status");
 			gScore = document.getElementById("score");
 			gCanvas = document.getElementById("canvas");
+			gCanvas.width = window.innerWidth*0.9;
+			gCanvas.height = window.innerHeight*0.5;
 			gCtxt = gCanvas.getContext("2d");
 			bX = Math.random()*gCanvas.width;
 			bY = 0;
