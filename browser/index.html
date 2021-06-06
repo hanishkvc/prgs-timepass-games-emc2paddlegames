@@ -56,7 +56,7 @@
 		const ZONE_SLOW = 2;
 		var gZone = {
 			'type': ZONE_NONE, 't2l': 0,
-			'x1': 0, 'x2': 0,
+			'xm': 0, 'x1': 0, 'x2': 0,
 			'w': 64,
 			};
 		var ZONE_TIME2LIVE = 1024;
@@ -87,9 +87,9 @@
 
 		function vert_text(txt, x, y) {
 			gCtxt.fillStyle = "#D0D0D0";
-			yD = gCtxt.measureText('8').width*1.2;
-			for(c in txt) {
-				gCtxt.fillText(c, x, y);
+			yD = gCtxt.measureText('8').width*2;
+			for(i in txt) {
+				gCtxt.fillText(txt[i], x, y);
 				y += yD;
 			}
 		}
@@ -105,12 +105,12 @@
 				if (gZone.type === ZONE_POINTS) {
 					gCtxt.fillStyle = "#208020";
 					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text("Points", gZone.x1, 40);
+					vert_text("POINTS", gZone.xm, 40);
 				}
 				if (gZone.type === ZONE_SLOW) {
-					gCtxt.fillStyle = "#202060";
+					gCtxt.fillStyle = "#F080F0";
 					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text("Slow", gZone.x1, 40);
+					vert_text("SLOW", gZone.xm, 40);
 				}
 			}
 		}
@@ -149,9 +149,9 @@
 				gZone.type = ZONE_NONE;
 			}
 			if (gZone.type !== ZONE_NONE) {
-				let zoneLoc = Math.random()*gElCanvas.width;
-				gZone.x1 = zoneLoc - (gZone.w/2);
-				gZone.x2 = zoneLoc + (gZone.w/2);
+				gZone.xm = Math.random()*gElCanvas.width;
+				gZone.x1 = gZone.xm - (gZone.w/2);
+				gZone.x2 = gZone.xm + (gZone.w/2);
 				gZone.t2l = ZONE_TIME2LIVE;
 			}
 		}
