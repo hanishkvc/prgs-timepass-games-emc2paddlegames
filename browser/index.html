@@ -122,6 +122,23 @@
 		}
 
 
+		function zone_maybe() {
+			if (Math.random() > 0.5) {
+				gZone.type = ZONE_POINTS;
+			} else if (Math.random() > 0.8) {
+				gZone.type = ZONE_SLOW;
+			} else {
+				gZone.type = ZONE_NONE;
+			}
+			if (gZone.type !== ZONE_NONE) {
+				let zoneLoc = Math.random()*gElCanvas.width;
+				gZone.x1 = zoneLoc - (gZone.w/2);
+				gZone.x2 = zoneLoc + (gZone.w/2);
+				gZone.t2l = ZONE_TIME2LIVE;
+			}
+		}
+
+
 		function next_level() {
 			ball.dX = 0.5 - Math.random();
 			user.points += POINTS_NEXTLEVEL;
@@ -131,14 +148,7 @@
 			update_status("NextLevel, Run kid run...");
 			ball.dY *= 1.3;
 			user.repeat = LAZY_REPEAT;
-			if (Math.random() > 0.5) {
-				gZone.type = Math.random()*gElCanvas.width;
-				gZone.x1 = gZone.type - (gZone.w/2);
-				gZone.x2 = gZone.type + (gZone.w/2);
-				gZone.t2l = ZONE_TIME2LIVE;
-			} else {
-				gZone.type = ZONE_NONE;
-			}
+			zone_maybe();
 		}
 
 
