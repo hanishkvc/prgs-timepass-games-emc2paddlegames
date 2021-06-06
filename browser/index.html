@@ -25,6 +25,7 @@
 			<p> Get ever increasing points for getting into next levels.
 			<p> Bounce the ball straight multiple times to switch levels.
 			<p> Look out for the short lived special zones.
+			<p> Use left and right arrow keys to control the paddle.
 		</div>
 	<script>
 		var gTimer;
@@ -171,12 +172,14 @@
 		}
 
 
-		function move_paddle(loc) {
+		function move_paddle(loc, force) {
+			delta = (pX - bX)/2;
+			if (delta < pD) delta = pD;
 			if (loc < gDispMid){
-				pX -= pD;
+				pX -= delta;
 				if (pX <= 0) pX = 0;
 			} else {
-				pX += pD;
+				pX += delta;
 				if (pX >= gCanvas.width) pX = gCanvas.width;
 			}
 		}
@@ -192,6 +195,7 @@
 
 
 		function handle_click(ev) {
+			//console.log(ev);
 			move_paddle(ev.offsetX);
 			ev.preventDefault();
 		}
