@@ -222,7 +222,7 @@
 						user.points += POINTS_NORMAL;
 						update_status("INFO:PointsAreRaining: lucky you");
 					} else if (gZone.type === ZONE_SLOW) {
-						ball.dY *= Math.pow(0.9999, gZone.t2l);
+						ball.dY *= Math.pow(0.999999, gZone.t2l);
 						update_status("INFO:Slowing down");
 					}
 				}
