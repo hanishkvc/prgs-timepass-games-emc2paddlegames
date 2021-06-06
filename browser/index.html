@@ -31,9 +31,9 @@
 		</div>
 	<script>
 		var gTimer;
-		var gScore;
-		var gStatus;
-		var gCanvas;
+		var gElScore;
+		var gElStatus;
+		var gElCanvas;
 		var gCtxt;
 		var ball = {
 			'x': 0, 'y': 0,
@@ -73,10 +73,10 @@
 		function update_status(msg) {
 			var gameTime = user_time();
 			if (gZone.type === -1)
-				gScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints}`;
+				gElScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints}`;
 			else
-				gScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints} : T2L ${gZone.t2l}`;
-			gStatus.textContent = msg;
+				gElScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints} : T2L ${gZone.t2l}`;
+			gElStatus.textContent = msg;
 		}
 
 
@@ -88,14 +88,14 @@
 					return;
 				}
 				gCtxt.fillStyle = "#208020";
-				gCtxt.fillRect(gZone.x1, 0, gZone.w, gCanvas.height);
+				gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
 			}
 		}
 
 
 		function display_me() {
 			gCtxt.fillStyle = "#20D0D0";
-			gCtxt.fillRect(0, 0, gCanvas.width, gCanvas.height);
+			gCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
 			display_zones();
 			if (gRepeat === 0)
 				gCtxt.fillStyle = "#D0D020";
@@ -127,7 +127,7 @@
 			ball.dY *= 1.3;
 			gRepeat = LAZY_REPEAT;
 			if (Math.random() > 0.5) {
-				gZone.type = Math.random()*gCanvas.width;
+				gZone.type = Math.random()*gElCanvas.width;
 				gZone.x1 = gZone.type - (gZone.w/2);
 				gZone.x2 = gZone.type + (gZone.w/2);
 				gZone.t2l = ZONE_TIME2LIVE;
@@ -175,13 +175,13 @@
 				//update_status("INFO: Ball reached top");
 				ball.dY = -1*ball.dY;
 			}
-			if ((ball.x < 0) || (ball.x > gCanvas.width)) {
+			if ((ball.x < 0) || (ball.x > gElCanvas.width)) {
 				/*
 				update_status("Yeh Kya uha..., refresh to start over");
 				clearInterval(gTimer);
 				*/
-				if (ball.x < 0) ball.x = gCanvas.width;
-				if (ball.x > gCanvas.width) ball.x = 0;
+				if (ball.x < 0) ball.x = gElCanvas.width;
+				if (ball.x > gElCanvas.width) ball.x = 0;
 			}
 			if (gZone.type >= 0) {
 				if ((gZone.x1 < ball.x) && (ball.x < gZone.x2)) {
@@ -201,7 +201,7 @@
 				if (paddle.x <= 0) paddle.x = 0;
 			} else {
 				paddle.x += delta;
-				if (paddle.x >= gCanvas.width) paddle.x = gCanvas.width;
+				if (paddle.x >= gElCanvas.width) paddle.x = gElCanvas.width;
 			}
 		}
 
@@ -210,7 +210,7 @@
 			if (ev.key === "ArrowLeft") {
 				move_paddle(0);
 			} else if (ev.key === "ArrowRight") {
-				move_paddle(gCanvas.width);
+				move_paddle(gElCanvas.width);
 			}
 		}
 
@@ -228,36 +228,36 @@
 
 
 		function ball_init() {
-			ball.x = Math.random()*gCanvas.width;
+			ball.x = Math.random()*gElCanvas.width;
 			ball.y = 0;
 			ball.xAdj = Math.round(ball.w/2)
 		}
 
 
 		function paddle_init() {
-			paddle.x = Math.random()*gCanvas.width;
-			paddle.y = gCanvas.height-10;
+			paddle.x = Math.random()*gElCanvas.width;
+			paddle.y = gElCanvas.height-10;
 			paddle.xAdj = Math.round(paddle.w/2)
 		}
 
 
 		function init_me() {
-			gStatus = document.getElementById("status");
-			gScore = document.getElementById("score");
-			gCanvas = document.getElementById("canvas");
-			gCanvas.width = window.innerWidth*0.97;
-			gCanvas.height = window.innerHeight*0.5;
-			gCtxt = gCanvas.getContext("2d");
+			gElStatus = document.getElementById("status");
+			gElScore = document.getElementById("score");
+			gElCanvas = document.getElementById("canvas");
+			gElCanvas.width = window.innerWidth*0.97;
+			gElCanvas.height = window.innerHeight*0.5;
+			gCtxt = gElCanvas.getContext("2d");
 			ball_init();
 			paddle_init();
-			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gCanvas.width/720))
-			gZone.w = gCanvas.width/10;
+			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gElCanvas.width/720))
+			gZone.w = gElCanvas.width/10;
 			gStartTime = new Date();
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
-			gDispMid = gCanvas.width/2;
-			gCanvas.onclick = handle_click;
-			gCanvas.ondblclick = blackhole_dblclick;
+			gDispMid = gElCanvas.width/2;
+			gElCanvas.onclick = handle_click;
+			gElCanvas.ondblclick = blackhole_dblclick;
 		}
 
 
