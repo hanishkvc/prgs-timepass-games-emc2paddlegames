@@ -39,11 +39,14 @@
 			'x': 0, 'y': 0,
 			'w': 20, 'h': 20,
 			'dX': 0, 'dY': 2,
-			'xAdj': Math.round(ball.w/2)
+			'xAdj': 10
 			}
-		var pX, pY;
-		const pW = 40, pH = 5, pD = 4;
-		const pXAdj = Math.round(pW/2, 0);
+		var paddle = {
+			'x': 0, 'y': 0,
+			'w': 40, 'h': 5,
+			'minD': 4,
+			'xAdj': 20
+			}
 		var gArcRad = 10;
 		const LAZY_REPEAT = 2;
 		var gRepeat = LAZY_REPEAT;
@@ -100,7 +103,7 @@
 				gCtxt.fillStyle = "#802020";
 			gCtxt.fillRect(ball.x-ball.xAdj, ball.y, ball.w, ball.h);
 			gCtxt.fillStyle = "#202020";
-			gCtxt.fillRect(pX-pXAdj, pY, pW, pH);
+			gCtxt.fillRect(paddle.x-paddle.xAdj, paddle.y, paddle.w, paddle.h);
 		}
 
 
@@ -137,10 +140,10 @@
 		function next_frame() {
 			ball.y += ball.dY;
 			ball.x += ball.dX;
-			if ((pY - ball.y) < pH) {
+			if ((paddle.y - ball.y) < paddle.h) {
 				//update_status("INFO: Ball reached bottom");
-				bD = ball.x - pX;
-				if (Math.abs(bD) > pXAdj) {
+				bD = ball.x - paddle.x;
+				if (Math.abs(bD) > paddle.xAdj) {
 					update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
 					clearInterval(gTimer);
 					gTimer = setInterval(arc_out, 100);
@@ -191,14 +194,14 @@
 
 
 		function move_paddle(loc, force) {
-			var delta = Math.abs((pX - ball.x)/2);
-			if (delta < pD) delta = pD;
+			var delta = Math.abs((paddle.x - ball.x)/2);
+			if (delta < paddle.minD) delta = paddle.minD;
 			if (loc < gDispMid){
-				pX -= delta;
-				if (pX <= 0) pX = 0;
+				paddle.x -= delta;
+				if (paddle.x <= 0) paddle.x = 0;
 			} else {
-				pX += delta;
-				if (pX >= gCanvas.width) pX = gCanvas.width;
+				paddle.x += delta;
+				if (paddle.x >= gCanvas.width) paddle.x = gCanvas.width;
 			}
 		}
 
@@ -224,6 +227,20 @@
 		}
 
 
+		function ball_init() {
+			ball.x = Math.random()*gCanvas.width;
+			ball.y = 0;
+			ball.xAdj = Math.round(ball.w/2)
+		}
+
+
+		function paddle_init() {
+			paddle.x = Math.random()*gCanvas.width;
+			paddle.y = gCanvas.height-10;
+			paddle.xAdj = Math.round(paddle.w/2)
+		}
+
+
 		function init_me() {
 			gStatus = document.getElementById("status");
 			gScore = document.getElementById("score");
@@ -231,10 +248,8 @@
 			gCanvas.width = window.innerWidth*0.97;
 			gCanvas.height = window.innerHeight*0.5;
 			gCtxt = gCanvas.getContext("2d");
-			ball.x = Math.random()*gCanvas.width;
-			ball.y = 0;
-			pX = Math.random()*gCanvas.width;
-			pY = gCanvas.height-10;
+			ball_init();
+			paddle_init();
 			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gCanvas.width/720))
 			gZone.w = gCanvas.width/10;
 			gStartTime = new Date();
