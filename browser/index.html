@@ -51,8 +51,11 @@
 		const LAZY_REPEAT = 2;
 		var POINTS_NORMAL = 1;
 		var POINTS_NEXTLEVEL = 4;
+		const ZONE_NONE = -1;
+		const ZONE_POINTS = 1;
+		const ZONE_SLOW = 2;
 		var gZone = {
-			'type': -1, 't2l': 0,
+			'type': ZONE_NONE, 't2l': 0,
 			'x1': 0, 'x2': 0,
 			'w': 64,
 			};
@@ -74,7 +77,7 @@
 
 		function update_status(msg) {
 			var gameTime = user_time();
-			if (gZone.type === -1)
+			if (gZone.type === ZONE_NONE)
 				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points}`;
 			else
 				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points} : T2L ${gZone.t2l}`;
@@ -86,7 +89,7 @@
 			if (gZone.type > 0) {
 				gZone.t2l -= 1;
 				if (gZone.t2l < 0) {
-					gZone.type = -1;
+					gZone.type = ZONE_NONE;
 					return;
 				}
 				gCtxt.fillStyle = "#208020";
@@ -134,7 +137,7 @@
 				gZone.x2 = gZone.type + (gZone.w/2);
 				gZone.t2l = ZONE_TIME2LIVE;
 			} else {
-				gZone.type = -1;
+				gZone.type = ZONE_NONE;
 			}
 		}
 
