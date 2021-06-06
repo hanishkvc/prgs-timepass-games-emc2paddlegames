@@ -141,9 +141,10 @@
 
 
 		function zone_maybe() {
-			if (Math.random() > 0.5) {
+			let randomChance = Math.random();
+			if (randomChance > 0.5) {
 				gZone.type = ZONE_POINTS;
-			} else if (Math.random() > 0.8) {
+			} else if (randomChance < 0.2) {
 				gZone.type = ZONE_SLOW;
 			} else {
 				gZone.type = ZONE_NONE;
@@ -223,7 +224,7 @@
 						update_status("INFO:PointsAreRaining: lucky you");
 					} else if (gZone.type === ZONE_SLOW) {
 						ball.dY *= Math.pow(0.999999, gZone.t2l);
-						update_status("INFO:Slowing down");
+						update_status(`INFO:Slowing down: ${ball.dY.toFixed(4)}`);
 					}
 				}
 			}
