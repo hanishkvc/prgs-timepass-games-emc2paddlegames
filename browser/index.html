@@ -164,7 +164,7 @@
 			POINTS_NORMAL += 1;
 			user.level += 1;
 			update_status("NextLevel, Run kid run...");
-			ball.dY *= (1 + (0.3*Math.pow(0.97,user.level)));
+			ball.dY *= (1 + (0.3*Math.pow(0.94,user.level)));
 			user.repeat = LAZY_REPEAT;
 			zone_maybe();
 		}
@@ -218,8 +218,13 @@
 			}
 			if (gZone.type >= 0) {
 				if ((gZone.x1 < ball.x) && (ball.x < gZone.x2)) {
-					user.points += POINTS_NORMAL;
-					update_status("INFO: lucky you");
+					if (gZone.type === ZONE_POINTS) {
+						user.points += POINTS_NORMAL;
+						update_status("INFO:PointsAreRaining: lucky you");
+					} else if (gZone.type === ZONE_SLOW) {
+						ball.dY *= Math.pow(0.9999, gZone.t2l);
+						update_status("INFO:Slowing down");
+					}
 				}
 			}
 			display_me();
