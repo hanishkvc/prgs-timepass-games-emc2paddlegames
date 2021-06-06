@@ -57,7 +57,7 @@
 		var gZone = {
 			'type': -1, 't2l': 0,
 			'x1': 0, 'x2': 0,
-			'w': 0,
+			'w': 64,
 			};
 		var ZONE_TIME2LIVE = 1024;
 		var gDispMid;
@@ -241,6 +241,12 @@
 		}
 
 
+		function zone_init() {
+			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gElCanvas.width/720))
+			gZone.w = gElCanvas.width/10;
+		}
+
+
 		function init_me() {
 			gElStatus = document.getElementById("status");
 			gElScore = document.getElementById("score");
@@ -250,8 +256,7 @@
 			gCtxt = gElCanvas.getContext("2d");
 			ball_init();
 			paddle_init();
-			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gElCanvas.width/720))
-			gZone.w = gElCanvas.width/10;
+			zone_init();
 			gStartTime = new Date();
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
