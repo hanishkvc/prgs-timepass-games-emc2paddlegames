@@ -50,7 +50,7 @@
 		var gPoints = 0;
 		var gSpecialZone = -1;
 		var gZoneX1, gZoneX2, gZoneWidth;
-		const ZONE_TIME2LIVE = 1024;
+		var ZONE_TIME2LIVE = 1024;
 		var gZoneTime2Live;
 		var gDispMid;
 		var gStartTime;
@@ -220,6 +220,7 @@
 			bY = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
+			ZONE_TIME2LIVE *= (gCanvas.width/720)
 			gZoneWidth = gCanvas.width/10;
 			gStartTime = new Date();
 			gTimer = setInterval(next_frame, 50);
