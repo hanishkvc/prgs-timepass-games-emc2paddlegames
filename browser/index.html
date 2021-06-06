@@ -53,13 +53,21 @@
 		const ZONE_TIME2LIVE = 1024;
 		var gZoneTime2Live;
 		var gDispMid;
+		var gStartTime;
+
+
+		function user_time() {
+			var delta = new Date((new Date()) - gStartTime);
+			return `${delta.getUTCMinutes()}.${delta.getUTCSeconds()}`
+		}
 
 
 		function update_status(msg) {
+			var gameTime = user_time();
 			if (gSpecialZone === -1)
-				gScore.textContent = `L${gLevel} : P${gPoints}`;
+				gScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints}`;
 			else
-				gScore.textContent = `L${gLevel} : P${gPoints} : T2L ${gZoneTime2Live}`;
+				gScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints} : T2L ${gZoneTime2Live}`;
 			gStatus.textContent = msg;
 		}
 
@@ -173,7 +181,7 @@
 
 
 		function move_paddle(loc, force) {
-			delta = Math.abs((pX - bX)/2);
+			var delta = Math.abs((pX - bX)/2);
 			if (delta < pD) delta = pD;
 			if (loc < gDispMid){
 				pX -= delta;
@@ -205,7 +213,7 @@
 			gStatus = document.getElementById("status");
 			gScore = document.getElementById("score");
 			gCanvas = document.getElementById("canvas");
-			gCanvas.width = window.innerWidth*0.9;
+			gCanvas.width = window.innerWidth*0.97;
 			gCanvas.height = window.innerHeight*0.5;
 			gCtxt = gCanvas.getContext("2d");
 			bX = Math.random()*gCanvas.width;
@@ -213,6 +221,7 @@
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
 			gZoneWidth = gCanvas.width/10;
+			gStartTime = new Date();
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
 			gDispMid = gCanvas.width/2;
