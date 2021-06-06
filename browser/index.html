@@ -85,6 +85,16 @@
 		}
 
 
+		function vert_text(txt, x, y) {
+			gCtxt.fillStyle = "#D0D0D0";
+			yD = gCtxt.measureText('8').width*1.2;
+			for(c in txt) {
+				gCtxt.fillText(c, x, y);
+				y += yD;
+			}
+		}
+
+
 		function display_zones() {
 			if (gZone.type > 0) {
 				gZone.t2l -= 1;
@@ -92,8 +102,16 @@
 					gZone.type = ZONE_NONE;
 					return;
 				}
-				gCtxt.fillStyle = "#208020";
-				gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+				if (gZone.type === ZONE_POINTS) {
+					gCtxt.fillStyle = "#208020";
+					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text("Points", gZone.x1, 40);
+				}
+				if (gZone.type === ZONE_SLOW) {
+					gCtxt.fillStyle = "#202060";
+					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text("Slow", gZone.x1, 40);
+				}
 			}
 		}
 
