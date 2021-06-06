@@ -136,12 +136,12 @@
 				//update_status("INFO: Ball reached bottom");
 				bD = bX - pX;
 				if (Math.abs(bD) > pXAdj) {
-					update_status(`Oops:Dropped the ball ${bD}, refresh to start over`);
+					update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
 					clearInterval(gTimer);
 					gTimer = setInterval(arc_out, 100);
 				} else {
 					gPoints += POINTS_NORMAL;
-					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD,2)}`);
+					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`);
 					bYD = -1*bYD;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
