@@ -49,11 +49,8 @@
 			}
 		var gArcRad = 10;
 		const LAZY_REPEAT = 2;
-		var gRepeat = LAZY_REPEAT;
-		var gLevel = 1;
 		var POINTS_NORMAL = 1;
 		var POINTS_NEXTLEVEL = 4;
-		var gPoints = 0;
 		var gZone = {
 			'type': -1, 't2l': 0,
 			'x1': 0, 'x2': 0,
@@ -61,11 +58,16 @@
 			};
 		var ZONE_TIME2LIVE = 1024;
 		var gDispMid;
-		var gStartTime;
+		var user = {
+			'level': 1,
+			'points': 0,
+			'time': 0,
+			'repeat': LAZY_REPEAT
+			}
 
 
 		function user_time() {
-			var delta = new Date((new Date()) - gStartTime);
+			var delta = new Date((new Date()) - user.time);
 			return `${delta.getUTCMinutes()}.${delta.getUTCSeconds()}`
 		}
 
@@ -73,9 +75,9 @@
 		function update_status(msg) {
 			var gameTime = user_time();
 			if (gZone.type === -1)
-				gElScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints}`;
+				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points}`;
 			else
-				gElScore.textContent = `L${gLevel} : T${gameTime} : P${gPoints} : T2L ${gZone.t2l}`;
+				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points} : T2L ${gZone.t2l}`;
 			gElStatus.textContent = msg;
 		}
 
@@ -97,7 +99,7 @@
 			gCtxt.fillStyle = "#20D0D0";
 			gCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
 			display_zones();
-			if (gRepeat === 0)
+			if (user.repeat === 0)
 				gCtxt.fillStyle = "#D0D020";
 			else
 				gCtxt.fillStyle = "#802020";
@@ -119,13 +121,13 @@
 
 		function next_level() {
 			ball.dX = 0.5 - Math.random();
-			gPoints += POINTS_NEXTLEVEL;
+			user.points += POINTS_NEXTLEVEL;
 			POINTS_NEXTLEVEL *= 2;
 			POINTS_NORMAL += 1;
-			gLevel += 1;
+			user.level += 1;
 			update_status("NextLevel, Run kid run...");
 			ball.dY *= 1.3;
-			gRepeat = LAZY_REPEAT;
+			user.repeat = LAZY_REPEAT;
 			if (Math.random() > 0.5) {
 				gZone.type = Math.random()*gElCanvas.width;
 				gZone.x1 = gZone.type - (gZone.w/2);
@@ -148,21 +150,21 @@
 					clearInterval(gTimer);
 					gTimer = setInterval(arc_out, 100);
 				} else {
-					gPoints += POINTS_NORMAL;
+					user.points += POINTS_NORMAL;
 					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`);
 					ball.dY = -1*ball.dY;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
 						ball.dX = 0;
-						gRepeat -= 1;
-						if (gRepeat == 0) {
+						user.repeat -= 1;
+						if (user.repeat == 0) {
 							update_status("ALERT: Meteriot on the way...");
 						}
-						if (gRepeat < 0) {
+						if (user.repeat < 0) {
 							next_level();
 						}
 					} else {
-						gRepeat = LAZY_REPEAT;
+						user.repeat = LAZY_REPEAT;
 						if (bD > 0) {
 							ball.dX = 0.4;
 						} else {
@@ -185,7 +187,7 @@
 			}
 			if (gZone.type >= 0) {
 				if ((gZone.x1 < ball.x) && (ball.x < gZone.x2)) {
-					gPoints += POINTS_NORMAL;
+					user.points += POINTS_NORMAL;
 					update_status("INFO: lucky you");
 				}
 			}
@@ -257,7 +259,7 @@
 			ball_init();
 			paddle_init();
 			zone_init();
-			gStartTime = new Date();
+			user.time = new Date();
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
 			gDispMid = gElCanvas.width/2;
