@@ -164,7 +164,7 @@
 			POINTS_NORMAL += 1;
 			user.level += 1;
 			update_status("NextLevel, Run kid run...");
-			ball.dY *= 1.3;
+			ball.dY *= (1 + (0.3*Math.pow(0.97,user.level)));
 			user.repeat = LAZY_REPEAT;
 			zone_maybe();
 		}
