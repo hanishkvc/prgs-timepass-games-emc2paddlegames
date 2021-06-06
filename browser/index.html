@@ -25,6 +25,7 @@
 			<p> Get ever increasing points for getting into next levels.
 			<p> Bounce the ball straight multiple times to switch levels.
 			<p> Look out for the short lived special zones.
+			<p> Ball can warp around on screen, but paddle cant.
 			<p> Left and right arrow keys could help control the paddle better.
 		</div>
 	<script>
@@ -168,8 +169,12 @@
 				bYD = -1*bYD;
 			}
 			if ((bX < 0) || (bX > gCanvas.width)) {
+				/*
 				update_status("Yeh Kya uha..., refresh to start over");
 				clearInterval(gTimer);
+				*/
+				if (bX < 0) bX = gCanvas.width;
+				if (bX > gCanvas.width) bX = 0;
 			}
 			if (gSpecialZone >= 0) {
 				if ((gZoneX1 < bX) && (bX < gZoneX2)) {
