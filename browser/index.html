@@ -45,7 +45,7 @@
 		const LAZY_REPEAT = 2;
 		var gRepeat = LAZY_REPEAT;
 		var gLevel = 1;
-		const POINTS_NORMAL = 1;
+		var POINTS_NORMAL = 1;
 		var POINTS_NEXTLEVEL = 4;
 		var gPoints = 0;
 		var gSpecialZone = -1;
@@ -113,6 +113,7 @@
 			bXD = 0.5 - Math.random();
 			gPoints += POINTS_NEXTLEVEL;
 			POINTS_NEXTLEVEL *= 2;
+			POINTS_NORMAL += 1;
 			gLevel += 1;
 			update_status("NextLevel, Run kid run...");
 			bYD *= 1.3;
