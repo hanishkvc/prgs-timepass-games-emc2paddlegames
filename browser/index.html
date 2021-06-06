@@ -173,7 +173,7 @@
 
 
 		function move_paddle(loc, force) {
-			delta = (pX - bX)/2;
+			delta = Math.abs((pX - bX)/2);
 			if (delta < pD) delta = pD;
 			if (loc < gDispMid){
 				pX -= delta;
