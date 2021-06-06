@@ -35,12 +35,13 @@
 		var gStatus;
 		var gCanvas;
 		var gCtxt;
-		var bX, bY;
-		const bW = 20;
-		const bH = 20;
-		var bXD = 0, bYD = 2;
-		const bXAdj = Math.round(bW/2, 0);
-		var pX, bY;
+		var ball = {
+			'x': 0, 'y': 0,
+			'w': 20, 'h': 20,
+			'dX': 0, 'dY': 2,
+			'xAdj': Math.round(ball.w/2)
+			}
+		var pX, pY;
 		const pW = 40, pH = 5, pD = 4;
 		const pXAdj = Math.round(pW/2, 0);
 		var gArcRad = 10;
@@ -97,7 +98,7 @@
 				gCtxt.fillStyle = "#D0D020";
 			else
 				gCtxt.fillStyle = "#802020";
-			gCtxt.fillRect(bX-bXAdj, bY, bW, bH);
+			gCtxt.fillRect(ball.x-ball.xAdj, ball.y, ball.w, ball.h);
 			gCtxt.fillStyle = "#202020";
 			gCtxt.fillRect(pX-pXAdj, pY, pW, pH);
 		}
@@ -105,7 +106,7 @@
 
 		function arc_out() {
 			gCtxt.beginPath()
-			gCtxt.arc(bX,bY,gArcRad,0,3.14,true);
+			gCtxt.arc(ball.x,ball.y,gArcRad,0,3.14,true);
 			gArcRad += 5;
 			gCtxt.fillStyle=`rgb( ${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256})`;
 			gCtxt.fill()
@@ -114,13 +115,13 @@
 
 
 		function next_level() {
-			bXD = 0.5 - Math.random();
+			ball.dX = 0.5 - Math.random();
 			gPoints += POINTS_NEXTLEVEL;
 			POINTS_NEXTLEVEL *= 2;
 			POINTS_NORMAL += 1;
 			gLevel += 1;
 			update_status("NextLevel, Run kid run...");
-			bYD *= 1.3;
+			ball.dY *= 1.3;
 			gRepeat = LAZY_REPEAT;
 			if (Math.random() > 0.5) {
 				gZone.type = Math.random()*gCanvas.width;
@@ -134,11 +135,11 @@
 
 
 		function next_frame() {
-			bY += bYD;
-			bX += bXD;
-			if ((pY - bY) < pH) {
+			ball.y += ball.dY;
+			ball.x += ball.dX;
+			if ((pY - ball.y) < pH) {
 				//update_status("INFO: Ball reached bottom");
-				bD = bX - pX;
+				bD = ball.x - pX;
 				if (Math.abs(bD) > pXAdj) {
 					update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
 					clearInterval(gTimer);
@@ -146,10 +147,10 @@
 				} else {
 					gPoints += POINTS_NORMAL;
 					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`);
-					bYD = -1*bYD;
+					ball.dY = -1*ball.dY;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
-						bXD = 0;
+						ball.dX = 0;
 						gRepeat -= 1;
 						if (gRepeat == 0) {
 							update_status("ALERT: Meteriot on the way...");
@@ -160,27 +161,27 @@
 					} else {
 						gRepeat = LAZY_REPEAT;
 						if (bD > 0) {
-							bXD = 0.4;
+							ball.dX = 0.4;
 						} else {
-							bXD = -0.4;
+							ball.dX = -0.4;
 						}
 					}
 				}
 			}
-			if ((bY < 0) && (bYD < 0)) {
+			if ((ball.y < 0) && (ball.dY < 0)) {
 				//update_status("INFO: Ball reached top");
-				bYD = -1*bYD;
+				ball.dY = -1*ball.dY;
 			}
-			if ((bX < 0) || (bX > gCanvas.width)) {
+			if ((ball.x < 0) || (ball.x > gCanvas.width)) {
 				/*
 				update_status("Yeh Kya uha..., refresh to start over");
 				clearInterval(gTimer);
 				*/
-				if (bX < 0) bX = gCanvas.width;
-				if (bX > gCanvas.width) bX = 0;
+				if (ball.x < 0) ball.x = gCanvas.width;
+				if (ball.x > gCanvas.width) ball.x = 0;
 			}
 			if (gZone.type >= 0) {
-				if ((gZone.x1 < bX) && (bX < gZone.x2)) {
+				if ((gZone.x1 < ball.x) && (ball.x < gZone.x2)) {
 					gPoints += POINTS_NORMAL;
 					update_status("INFO: lucky you");
 				}
@@ -190,7 +191,7 @@
 
 
 		function move_paddle(loc, force) {
-			var delta = Math.abs((pX - bX)/2);
+			var delta = Math.abs((pX - ball.x)/2);
 			if (delta < pD) delta = pD;
 			if (loc < gDispMid){
 				pX -= delta;
@@ -230,8 +231,8 @@
 			gCanvas.width = window.innerWidth*0.97;
 			gCanvas.height = window.innerHeight*0.5;
 			gCtxt = gCanvas.getContext("2d");
-			bX = Math.random()*gCanvas.width;
-			bY = 0;
+			ball.x = Math.random()*gCanvas.width;
+			ball.y = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
 			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gCanvas.width/720))
