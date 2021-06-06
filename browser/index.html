@@ -75,12 +75,16 @@
 		}
 
 
-		function update_status(msg) {
+		function update_status(msg, ballMoveInfo) {
 			var gameTime = user_time();
 			if (gZone.type === ZONE_NONE)
 				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points}`;
 			else
 				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points} : T2L ${gZone.t2l}`;
+			if (ballMoveInfo) {
+				addMsg = ` : Ball dX${ball.dX.toFixed(4)} dY${ball.dY.toFixed(4)}`;
+				msg += addMsg;
+			}
 			gElStatus.textContent = msg;
 		}
 
@@ -183,7 +187,7 @@
 					gTimer = setInterval(arc_out, 100);
 				} else {
 					user.points += POINTS_NORMAL;
-					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`);
+					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`, true);
 					ball.dY = -1*ball.dY;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
@@ -224,7 +228,7 @@
 						update_status("INFO:PointsAreRaining: lucky you");
 					} else if (gZone.type === ZONE_SLOW) {
 						ball.dY *= Math.pow(0.999999, gZone.t2l);
-						update_status(`INFO:Slowing down: ${ball.dY.toFixed(4)}`);
+						update_status("INFO:Slowing down", true);
 					}
 				}
 			}
