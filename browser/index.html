@@ -141,7 +141,7 @@
 					gTimer = setInterval(arc_out, 100);
 				} else {
 					gPoints += POINTS_NORMAL;
-					update_status(`INFO:Byalalu, contact established with ball ${bD}`);
+					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD,2)}`);
 					bYD = -1*bYD;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
@@ -221,7 +221,7 @@
 			bY = 0;
 			pX = Math.random()*gCanvas.width;
 			pY = gCanvas.height-10;
-			ZONE_TIME2LIVE *= (gCanvas.width/720)
+			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gCanvas.width/720))
 			gZoneWidth = gCanvas.width/10;
 			gStartTime = new Date();
 			gTimer = setInterval(next_frame, 50);
