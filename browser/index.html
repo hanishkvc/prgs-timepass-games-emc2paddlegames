@@ -100,6 +100,7 @@
 
 
 		function display_zones() {
+			gCtxt.font = gZone.font;
 			if (gZone.type > 0) {
 				gZone.t2l -= 1;
 				if (gZone.t2l < 0) {
@@ -287,6 +288,7 @@
 		function zone_init() {
 			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gElCanvas.width/720))
 			gZone.w = gElCanvas.width/10;
+			gZone.font = `${gZone.w*0.3}px serif`;
 		}
 
 
