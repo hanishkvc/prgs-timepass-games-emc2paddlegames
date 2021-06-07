@@ -180,8 +180,11 @@
 
 
 		function game_over_user() {
-			prevHighScore = Number(localStorage.r1);
-			if (prevHighScore === undefined) prevHighScore = 0;
+			prevHighScore = localStorage.r1;
+			if (prevHighScore === undefined)
+				prevHighScore = 0;
+			else
+				prevHighScore = Number(prevHighScore);
 			if (prevHighScore < user.points) {
 				gCtxt.fillText(`Congrats, you bettered PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
 				localStorage.r1 = user.points;
