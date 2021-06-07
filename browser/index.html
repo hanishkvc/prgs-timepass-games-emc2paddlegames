@@ -135,13 +135,16 @@
 		}
 
 
-		function arc_out() {
+		function arc_out(cb) {
 			gCtxt.beginPath()
 			gCtxt.arc(ball.x,ball.y,gArcRad,0,3.14,true);
 			gArcRad += 5;
 			gCtxt.fillStyle=`rgb( ${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256})`;
 			gCtxt.fill()
-			if (gArcRad > 100) clearInterval(gTimer);
+			if (gArcRad > 100) {
+				clearInterval(gTimer);
+				if (cb) cb();
+			}
 		}
 
 
@@ -176,6 +179,25 @@
 		}
 
 
+		function game_over_user() {
+			prevHighScore = Number(localStorage.r1);
+			if (prevHighScore === undefined) prevHighScore = 0;
+			if (prevHighScore < user.points) {
+				gCtxt.fillText(`Congrats, you bettered PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
+				localStorage.r1 = user.points;
+			} else {
+				gCtxt.fillText(`Better luck next time, PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
+			}
+		}
+
+
+		function game_over() {
+			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
+			clearInterval(gTimer);
+			gTimer = setInterval(arc_out, 100, game_over_user);
+		}
+
+
 		function next_frame() {
 			ball.y += ball.dY;
 			ball.x += ball.dX;
@@ -183,9 +205,7 @@
 				//update_status("INFO: Ball reached bottom");
 				bD = ball.x - paddle.x;
 				if (Math.abs(bD) > paddle.xAdj) {
-					update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
-					clearInterval(gTimer);
-					gTimer = setInterval(arc_out, 100);
+					game_over();
 				} else {
 					user.points += POINTS_NORMAL;
 					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`, true);
