@@ -290,20 +290,27 @@
 		}
 
 
+		function canvas_init() {
+			gElCanvas.width = window.innerWidth*0.97;
+			let maxHeight = gElCanvas.width*0.66;
+			let possibleHeight = window.innerHeight*0.5;
+			gElCanvas.height = (possibleHeight > maxHeight) ? maxHeight : possibleHeight;
+			gCtxt = gElCanvas.getContext("2d");
+			gDispMid = gElCanvas.width/2;
+		}
+
+
 		function init_me() {
 			gElStatus = document.getElementById("status");
 			gElScore = document.getElementById("score");
 			gElCanvas = document.getElementById("canvas");
-			gElCanvas.width = window.innerWidth*0.97;
-			gElCanvas.height = window.innerHeight*0.5;
-			gCtxt = gElCanvas.getContext("2d");
+			canvas_init();
 			ball_init();
 			paddle_init();
 			zone_init();
 			user.time = new Date();
 			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
-			gDispMid = gElCanvas.width/2;
 			gElCanvas.onclick = handle_click;
 			gElCanvas.ondblclick = blackhole_dblclick;
 		}
