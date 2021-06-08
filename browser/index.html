@@ -179,12 +179,26 @@
 		}
 
 
+		function shadow_on() {
+			gCtxt.shadowOffsetX = 2;
+			gCtxt.shadowOffsetY = 2;
+			gCtxt.shadowBlur = 2;
+			gCtxt.shadowColor = "rgba(0,0,0,0.5)";
+		}
+
+
+		function shadow_off() {
+			gCtxt.shadowColor = "rgba(0,0,0,0)";
+		}
+
+
 		function game_over_user() {
 			prevHighScore = localStorage.r1;
 			if (prevHighScore === undefined)
 				prevHighScore = 0;
 			else
 				prevHighScore = Number(prevHighScore);
+			shadow_on();
 			if (prevHighScore < user.points) {
 				gCtxt.fillText(`Congrats, you bettered PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
 				localStorage.r1 = user.points;
