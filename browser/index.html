@@ -137,6 +137,7 @@
 			gCtxt.fillRect(ball.x-ball.xAdj, ball.y, ball.w, ball.h);
 			gCtxt.fillStyle = "#202020";
 			gCtxt.fillRect(paddle.x-paddle.xAdj, paddle.y, paddle.w, paddle.h);
+			window.requestAnimationFrame(next_frame);
 		}
 
 
@@ -150,6 +151,7 @@
 				clearInterval(gTimer);
 				if (cb) cb();
 			}
+			window.requestAnimationFrame(arc_out, cb);
 		}
 
 
@@ -215,8 +217,7 @@
 
 		function game_over() {
 			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
-			clearInterval(gTimer);
-			gTimer = setInterval(arc_out, 100, game_over_user);
+			window.requestAnimationFrame(arc_out, game_over_user);
 		}
 
 
@@ -227,7 +228,7 @@
 				//update_status("INFO: Ball reached bottom");
 				bD = ball.x - paddle.x;
 				if (Math.abs(bD) > paddle.xAdj) {
-					game_over();
+					return game_over();
 				} else {
 					user.points += POINTS_NORMAL;
 					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`, true);
@@ -349,10 +350,10 @@
 			paddle_init();
 			zone_init();
 			user.time = new Date();
-			gTimer = setInterval(next_frame, 50);
 			window.onkeydown = handle_key;
 			gElCanvas.onclick = handle_click;
 			gElCanvas.ondblclick = blackhole_dblclick;
+			window.requestAnimationFrame(next_frame);
 		}
 
 
