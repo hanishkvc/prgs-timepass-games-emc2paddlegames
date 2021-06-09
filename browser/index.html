@@ -31,7 +31,7 @@
 			<p> Left and right arrow keys could help control the paddle better.
 		</div>
 		<div id="author">
-			<p> HanishKVC, v20210609IST1514 </p>
+			<p> HanishKVC, v20210609IST1927 </p>
 		</div>
 	<script>
 		var gPrevATime;
@@ -71,6 +71,7 @@
 			'time': 0,
 			'repeat': LAZY_REPEAT
 			}
+		var gAvgAnimAdjust = 0;
 
 
 		function user_time() {
@@ -225,6 +226,15 @@
 			if (atDelta === 0) return 0;
 			gPrevATime = curATime;
 			let atMult = atDelta/42; // Aim for around 24 frames per second
+			let rat = Math.abs(gAvgAnimAdjust - atMult)/gAvgAnimAdjust;
+			if (rat > 0.04) {
+				gCtxt.save()
+				gCtxt.strokeStyle = "#000";
+				gCtxt.font = "16px monospace";
+				gCtxt.strokeText(`Alert: Experiencing GravityWaves ${gAvgAnimAdjust.toFixed(3)} vs ${atMult.toFixed(3)}`, 20, 20);
+				gCtxt.restore();
+			}
+			gAvgAnimAdjust = 0.8*gAvgAnimAdjust + 0.2*atMult;
 			return atMult;
 		}
 
