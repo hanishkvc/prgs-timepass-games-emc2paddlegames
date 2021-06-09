@@ -31,7 +31,7 @@
 			<p> Left and right arrow keys could help control the paddle better.
 		</div>
 		<div id="author">
-			<p> HanishKVC, v20210609IST1213 </p>
+			<p> HanishKVC, v20210609IST1514 </p>
 		</div>
 	<script>
 		var gPrevATime;
@@ -243,6 +243,7 @@
 					user.points += POINTS_NORMAL;
 					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`, true);
 					ball.dY = -1*ball.dY;
+					ball.y = paddle.y-paddle.h;
 					bD = Math.round(bD/8)
 					if (bD === 0) {
 						ball.dX = 0;
