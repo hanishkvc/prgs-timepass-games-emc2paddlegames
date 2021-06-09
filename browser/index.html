@@ -235,6 +235,7 @@
 				gCtxt.restore();
 			}
 			gAvgAnimAdjust = 0.8*gAvgAnimAdjust + 0.2*atMult;
+			if (atMult > 4) return 0;
 			return atMult;
 		}
 
