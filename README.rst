@@ -59,3 +59,11 @@ Use math to hopefully control the acceleration/deceleration curves.
 If user enters a standard repeat pattern then jostle them out of it, by changing
 level and direction of deflection.
 
+Use callback time of requestAnimFrames, to try and sustain a uniform animation/game
+speed effect across devices/systems/browsers.
+
+Simulate a feel of movement by using partially transparent clearing of the frames.
+
+Use text shadows to make it visible even if contrast between text and background
+is less.
+
