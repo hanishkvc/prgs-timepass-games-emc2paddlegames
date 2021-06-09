@@ -31,7 +31,7 @@
 			<p> Left and right arrow keys could help control the paddle better.
 		</div>
 		<div id="author">
-			<p> HanishKVC, v20210609IST1927 </p>
+			<p> HanishKVC, v20210609IST2023 </p>
 		</div>
 	<script>
 		var gPrevATime;
@@ -235,7 +235,7 @@
 				gCtxt.restore();
 			}
 			gAvgAnimAdjust = 0.8*gAvgAnimAdjust + 0.2*atMult;
-			if (atMult > 4) return 0;
+			if (atMult > 4) return -1;
 			return atMult;
 		}
 
@@ -243,6 +243,10 @@
 		function next_frame(curATime) {
 			animAdjust = anim_adjust(curATime);
 			if (animAdjust === 0) return;
+			else if (animAdjust < 0) {
+				window.requestAnimationFrame(next_frame);
+				return;
+			}
 			ball.y += ball.dY*animAdjust;
 			ball.x += ball.dX*animAdjust;
 			if ((paddle.y - ball.y) < paddle.h) {
