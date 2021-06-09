@@ -35,6 +35,7 @@
 		</div>
 	<script>
 		var gTimer;
+		var gPrevATime;
 		var gElScore;
 		var gElStatus;
 		var gElCanvas;
@@ -221,9 +222,20 @@
 		}
 
 
-		function next_frame() {
-			ball.y += ball.dY;
-			ball.x += ball.dX;
+		function anim_adjust(curATime) {
+			let atDelta = curATime - gPrevATime;
+			if (atDelta === 0) return 0;
+			gPrevATime = curATime;
+			let atMult = atDelta/42; // Aim for around 24 frames per second
+			return atMult;
+		}
+
+
+		function next_frame(curATime) {
+			animAdjust = anim_adjust(curATime);
+			if (animAdjust === 0) return;
+			ball.y += ball.dY*animAdjust;
+			ball.x += ball.dX*animAdjust;
 			if ((paddle.y - ball.y) < paddle.h) {
 				//update_status("INFO: Ball reached bottom");
 				bD = ball.x - paddle.x;
@@ -342,6 +354,7 @@
 
 
 		function init_me() {
+			gPrevATime = performance.now();
 			gElStatus = document.getElementById("status");
 			gElScore = document.getElementById("score");
 			gElCanvas = document.getElementById("canvas");
