@@ -31,7 +31,7 @@
 			<p> Left and right arrow keys could help control the paddle better.
 		</div>
 		<div id="author">
-			<p> HanishKVC, v20210609IST2023 </p>
+			<p> HanishKVC, v20210609IST2135 </p>
 		</div>
 	<script>
 		var gPrevATime;
@@ -72,6 +72,20 @@
 			'repeat': LAZY_REPEAT
 			}
 		var gAvgAnimAdjust = 0;
+		var gGameRunning = true;
+
+
+		function init_vars() {
+			gGameRunning = true;
+			gZone.type = ZONE_NONE;
+			POINTS_NORMAL = 1;
+			POINTS_NEXTLEVEL = 4;
+			gArcRad = 10;
+			user.level = 1;
+			user.points = 0;
+			user.time = 0;
+			user.repeat = LAZY_REPEAT;
+		}
 
 
 		function user_time() {
@@ -212,11 +226,12 @@
 			} else {
 				gCtxt.fillText(`Better luck next time, PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
 			}
+			gGameRunning = false;
 		}
 
 
 		function game_over() {
-			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh to start over`);
+			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh/dblclick to start over`);
 			window.requestAnimationFrame(arc_out.bind(null, game_over_user));
 		}
 
@@ -333,6 +348,10 @@
 
 		function blackhole_dblclick(ev) {
 			ev.preventDefault();
+			if (gGameRunning === false) {
+				init_me();
+				update_status("New game started");
+			}
 		}
 
 
@@ -368,6 +387,7 @@
 
 
 		function init_me() {
+			init_vars();
 			gPrevATime = performance.now();
 			gElStatus = document.getElementById("status");
 			gElScore = document.getElementById("score");

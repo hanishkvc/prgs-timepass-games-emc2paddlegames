@@ -68,5 +68,7 @@ Use text shadows to make it visible even if contrast between text and background
 is less.
 
 Alert user if there is too much variation between animation frame calls from the
-browser.
+browser/system.
+
+Once over allow double click on canvas to start a fresh game.
 
