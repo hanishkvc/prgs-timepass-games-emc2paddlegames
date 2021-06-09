@@ -86,7 +86,7 @@
 			else
 				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points} : T2L ${gZone.t2l}`;
 			if (ballMoveInfo) {
-				addMsg = ` : Ball dX${ball.dX.toFixed(4)} dY${ball.dY.toFixed(4)}`;
+				addMsg = ` : Ball dX${ball.dX.toFixed(3)} dY${ball.dY.toFixed(3)}`;
 				msg += addMsg;
 			}
 			gElStatus.textContent = msg;
