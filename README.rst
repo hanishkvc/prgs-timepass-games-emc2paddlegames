@@ -28,6 +28,9 @@ The index.html itself contains the ui and the logic.
 Misc
 #######
 
+General
+=========
+
 Show level, points, time taken to make it interesting in a way.
 
    Adjust points with level.
@@ -72,6 +75,13 @@ browser/system.
 
 Once over allow double click on canvas to start a fresh game.
 
+
+Odd behavior in some devices
+==============================
+
+Offscreen canvas (Exp)
+------------------------
+
 Try offscreen canvas for background (plain color + once in a while zones) to see,
 if the very odd toomuch out of sync AnimFrame timing seen in one mobile, as well
 as the inconsistency in ipad (but still visually smooth enough) changes or not.
@@ -82,3 +92,12 @@ as the inconsistency in ipad (but still visually smooth enough) changes or not.
    back and forth with some other app or browser tab or so), but also control
    the logical frame matching wrt skipped frames (due to missing call back), to
    be within a max of 1+1 dropped frame.
+
+
+setInterval (ExpSI)
+----------------------
+
+Reverting to setInterval from requestAnimationFrame to see, if the odd behavior
+wrt timing btw frames noticed on a specific mobile and also the jittery but
+visually fine behavior noticed on iPad, changes with this or not.
+
