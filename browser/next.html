@@ -142,9 +142,13 @@
 
 		function display_me() {
 			//gCtxt.fillStyle = "#20D0D0";
-			gCtxt.fillStyle = "#20D0D080";
-			gCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
-			display_zones(gCtxt);
+			if (gCtxt.refreshMe) {
+				gOSCtxt.fillStyle = "#20D0D0";
+				gOSCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
+				display_zones(gOSCtxt);
+				gCtxt.refreshMe = false;
+			}
+			gCtxt.drawImage(gOSCanvas, 0, 0);
 			if (user.repeat === 0)
 				gCtxt.fillStyle = "#D0D020";
 			else
@@ -197,6 +201,7 @@
 			ball.dY *= (1 + (0.3*Math.pow(0.94,user.level)));
 			user.repeat = LAZY_REPEAT;
 			zone_maybe();
+			gCtxt.refreshMe = true;
 		}
 
 
@@ -384,6 +389,10 @@
 			gElCanvas.height = (possibleHeight > maxHeight) ? maxHeight : possibleHeight;
 			gCtxt = gElCanvas.getContext("2d");
 			gDispMid = gElCanvas.width/2;
+			gOSCanvas = document.createElement("canvas");
+			gOSCanvas.width = gElCanvas.width;
+			gOSCanvas.height = gElCanvas.height;
+			gOSCtxt = gOSCanvas.getContext("2d");
 		}
 
 
@@ -402,6 +411,7 @@
 			gElCanvas.onclick = handle_click;
 			gElCanvas.ondblclick = blackhole_dblclick;
 			window.requestAnimationFrame(next_frame);
+			gCtxt.refreshMe = true;
 		}
 
 
