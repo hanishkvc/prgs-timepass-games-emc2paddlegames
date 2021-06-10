@@ -118,29 +118,35 @@
 		}
 
 
-		function display_zones(gc) {
-			gc.font = gZone.font;
+		function zone_t2l() {
 			if (gZone.type > 0) {
 				gZone.t2l -= 1;
 				if (gZone.t2l < 0) {
 					gZone.type = ZONE_NONE;
-					return;
-				}
-				if (gZone.type === ZONE_POINTS) {
-					gc.fillStyle = "#208020";
-					gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text(gc, "POINTS", gZone.xm, 40);
-				}
-				if (gZone.type === ZONE_SLOW) {
-					gc.fillStyle = "#F080F0";
-					gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text(gc, "SLOW", gZone.xm, 40);
+					gCtxt.refreshMe = true;
 				}
 			}
 		}
 
 
+		function display_zones(gc) {
+			gc.font = gZone.font;
+			console.log(`INFO:DispZone:${gZone.type}`);
+			if (gZone.type === ZONE_POINTS) {
+				gc.fillStyle = "#208020";
+				gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+				vert_text(gc, "POINTS", gZone.xm, 40);
+			}
+			if (gZone.type === ZONE_SLOW) {
+				gc.fillStyle = "#F080F0";
+				gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+				vert_text(gc, "SLOW", gZone.xm, 40);
+			}
+		}
+
+
 		function display_me() {
+			zone_t2l();
 			//gCtxt.fillStyle = "#20D0D0";
 			if (gCtxt.refreshMe) {
 				gOSCtxt.fillStyle = "#20D0D0";
@@ -219,6 +225,7 @@
 
 
 		function game_over_user() {
+			gCtxt.font = gZone.font;
 			prevHighScore = localStorage.r1;
 			if (prevHighScore === undefined)
 				prevHighScore = 0;
