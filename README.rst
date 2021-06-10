@@ -72,3 +72,13 @@ browser/system.
 
 Once over allow double click on canvas to start a fresh game.
 
+Try offscreen canvas for background (plain color + once in a while zones) to see,
+if the very odd toomuch out of sync AnimFrame timing seen in one mobile, as well
+as the inconsistency in ipad (but still visually smooth enough) changes or not.
+
+   Avoid translucent background fill related motion effect for now.
+
+   Not only ignore/drop too large delays wrt anim frames (say when user switches
+   back and forth with some other app or browser tab or so), but also control
+   the logical frame matching wrt skipped frames (due to missing call back), to
+   be within a max of 1+1 dropped frame.
