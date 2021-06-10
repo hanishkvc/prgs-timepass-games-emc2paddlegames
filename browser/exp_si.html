@@ -73,6 +73,7 @@
 			}
 		var gAvgAnimAdjust = 0;
 		var gGameRunning = true;
+		var gTimer;
 
 
 		function init_vars() {
@@ -162,7 +163,6 @@
 			gCtxt.fillRect(ball.x-ball.xAdj, ball.y, ball.w, ball.h);
 			gCtxt.fillStyle = "#202020";
 			gCtxt.fillRect(paddle.x-paddle.xAdj, paddle.y, paddle.w, paddle.h);
-			window.requestAnimationFrame(next_frame);
 		}
 
 
@@ -175,7 +175,6 @@
 			if (gArcRad > 100) {
 				if (cb) return cb();
 			}
-			window.requestAnimationFrame(arc_out.bind(null, cb));
 		}
 
 
@@ -238,13 +237,15 @@
 			} else {
 				gCtxt.fillText(`Better luck next time, PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
 			}
+			clearInterval(gTimer);
 			gGameRunning = false;
 		}
 
 
 		function game_over() {
 			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh/dblclick to start over`);
-			window.requestAnimationFrame(arc_out.bind(null, game_over_user));
+			clearInterval(gTimer);
+			gTimer = setInterval(arc_out.bind(null, game_over_user), 100);
 		}
 
 
@@ -252,7 +253,7 @@
 			let atDelta = curATime - gPrevATime;
 			if (atDelta === 0) return 0;
 			gPrevATime = curATime;
-			let atMult = atDelta/42; // Aim for around 24 frames per second
+			let atMult = atDelta/100; // Aim for around 10 frames per second
 			let rat = (gAvgAnimAdjust - atMult)/gAvgAnimAdjust;
 			if (Math.abs(rat) > 0.60) {
 				gCtxt.save()
@@ -267,11 +268,11 @@
 		}
 
 
-		function next_frame(curATime) {
+		function next_frame() {
+			curATime = performance.now();
 			animAdjust = anim_adjust(curATime);
 			if (animAdjust === 0) return;
 			else if (animAdjust < 0) {
-				window.requestAnimationFrame(next_frame);
 				return;
 			}
 			if (animAdjust > 2) animAdjust = 2;
@@ -417,8 +418,8 @@
 			window.onkeydown = handle_key;
 			gElCanvas.onclick = handle_click;
 			gElCanvas.ondblclick = blackhole_dblclick;
-			window.requestAnimationFrame(next_frame);
 			gCtxt.refreshMe = true;
+			gTimer = setInterval(next_frame, 100);
 		}
 
 
