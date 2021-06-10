@@ -253,7 +253,7 @@
 			let atDelta = curATime - gPrevATime;
 			if (atDelta === 0) return 0;
 			gPrevATime = curATime;
-			let atMult = atDelta/60; // Aim for around 16 frames per second
+			let atMult = atDelta/40; // Aim for around 25 frames per second
 			let rat = (gAvgAnimAdjust - atMult)/gAvgAnimAdjust;
 			if (Math.abs(rat) > 0.60) {
 				gCtxt.save()
@@ -419,7 +419,7 @@
 			gElCanvas.onclick = handle_click;
 			gElCanvas.ondblclick = blackhole_dblclick;
 			gCtxt.refreshMe = true;
-			gTimer = setInterval(next_frame, 60);
+			gTimer = setInterval(next_frame, 40);
 		}
 
 
