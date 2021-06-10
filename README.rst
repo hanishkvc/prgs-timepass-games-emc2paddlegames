@@ -101,3 +101,9 @@ Reverting to setInterval from requestAnimationFrame to see, if the odd behavior
 wrt timing btw frames noticed on a specific mobile and also the jittery but
 visually fine behavior noticed on iPad, changes with this or not.
 
+The setInterval based logic seems to be more consistent (not necessarily perfect
+or fully smooth, but still) on the mobile which had the very inconsistent timing,
+however do note that it also by default aims for only 25 fps (based on my setup),
+compared to the ideal 60 fps aimed for animFrames by browser. Need to cross check
+this once again later and explore further later.
+
