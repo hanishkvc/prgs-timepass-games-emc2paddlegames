@@ -108,18 +108,18 @@
 		}
 
 
-		function vert_text(txt, x, y) {
-			gCtxt.fillStyle = "#D0D0D0";
-			yD = gCtxt.measureText('8').width*2;
+		function vert_text(gc, txt, x, y) {
+			gc.fillStyle = "#D0D0D0";
+			yD = gc.measureText('8').width*2;
 			for(i in txt) {
-				gCtxt.strokeText(txt[i], x, y);
+				gc.strokeText(txt[i], x, y);
 				y += yD;
 			}
 		}
 
 
-		function display_zones() {
-			gCtxt.font = gZone.font;
+		function display_zones(gc) {
+			gc.font = gZone.font;
 			if (gZone.type > 0) {
 				gZone.t2l -= 1;
 				if (gZone.t2l < 0) {
@@ -127,14 +127,14 @@
 					return;
 				}
 				if (gZone.type === ZONE_POINTS) {
-					gCtxt.fillStyle = "#208020";
-					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text("POINTS", gZone.xm, 40);
+					gc.fillStyle = "#208020";
+					gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text(gc, "POINTS", gZone.xm, 40);
 				}
 				if (gZone.type === ZONE_SLOW) {
-					gCtxt.fillStyle = "#F080F0";
-					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
-					vert_text("SLOW", gZone.xm, 40);
+					gc.fillStyle = "#F080F0";
+					gc.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text(gc, "SLOW", gZone.xm, 40);
 				}
 			}
 		}
@@ -144,7 +144,7 @@
 			//gCtxt.fillStyle = "#20D0D0";
 			gCtxt.fillStyle = "#20D0D080";
 			gCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
-			display_zones();
+			display_zones(gCtxt);
 			if (user.repeat === 0)
 				gCtxt.fillStyle = "#D0D020";
 			else
