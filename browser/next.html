@@ -1,0 +1,413 @@
+<html>
+	<head>
+		<title> E=MC^2 of Paddle Games </title>
+		<style>
+			#help { font-size: small; }
+			#canvas { touch-action: manipulation; }
+			#author { font-size: xx-small; text-align: right; }
+		</style>
+	</head>
+	<body>
+		<div id="top">
+		<h2> E=MC^2 of Paddle Games </h2>
+		<withloveto> Thanks for all the pizzas!!! Shreya, Kunju, Nanda, Chinnu </withloveto>
+		</div>
+		<hr>
+		<div id="main">
+			<canvas id="canvas" width=640 height=240> What Canvas??? No no no noo noo noooooo </canvas>
+		</div>
+		<hr>
+		<div id="controls">
+			<p id="score"> </p>
+			<p id="status"> Save Nature Save Earth </p>
+		</div>
+		<hr>
+		<div id="help">
+			<p> Get a point each time the ball hits the paddle. And definitely dont drop the ball.
+			<p> Get ever increasing points for getting into next levels.
+			<p> Bounce the ball straight multiple times to switch levels.
+			<p> Look out for the short lived special zones.
+			<p> Ball can warp around on screen, but paddle cant.
+			<p> Left and right arrow keys could help control the paddle better.
+		</div>
+		<div id="author">
+			<p> HanishKVC, v20210610IST2051 </p>
+		</div>
+	<script>
+		var gPrevATime;
+		var gElScore;
+		var gElStatus;
+		var gElCanvas;
+		var gCtxt;
+		var ball = {
+			'x': 0, 'y': 0,
+			'w': 20, 'h': 20,
+			'dX': 0, 'dY': 2,
+			'xAdj': 10
+			}
+		var paddle = {
+			'x': 0, 'y': 0,
+			'w': 40, 'h': 5,
+			'minD': 4,
+			'xAdj': 20
+			}
+		var gArcRad = 10;
+		const LAZY_REPEAT = 2;
+		var POINTS_NORMAL = 1;
+		var POINTS_NEXTLEVEL = 4;
+		const ZONE_NONE = -1;
+		const ZONE_POINTS = 1;
+		const ZONE_SLOW = 2;
+		var gZone = {
+			'type': ZONE_NONE, 't2l': 0,
+			'xm': 0, 'x1': 0, 'x2': 0,
+			'w': 64,
+			};
+		var ZONE_TIME2LIVE = 2560;
+		var gDispMid;
+		var user = {
+			'level': 1,
+			'points': 0,
+			'time': 0,
+			'repeat': LAZY_REPEAT
+			}
+		var gAvgAnimAdjust = 0;
+		var gGameRunning = true;
+
+
+		function init_vars() {
+			gGameRunning = true;
+			gZone.type = ZONE_NONE;
+			POINTS_NORMAL = 1;
+			POINTS_NEXTLEVEL = 4;
+			gArcRad = 10;
+			user.level = 1;
+			user.points = 0;
+			user.time = 0;
+			user.repeat = LAZY_REPEAT;
+		}
+
+
+		function user_time() {
+			var delta = new Date((new Date()) - user.time);
+			return `${delta.getUTCMinutes()}.${delta.getUTCSeconds()}`
+		}
+
+
+		function update_status(msg, ballMoveInfo) {
+			var gameTime = user_time();
+			if (gZone.type === ZONE_NONE)
+				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points}`;
+			else
+				gElScore.textContent = `L${user.level} : T${gameTime} : P${user.points} : T2L ${gZone.t2l}`;
+			if (ballMoveInfo) {
+				addMsg = ` : Ball dX${ball.dX.toFixed(3)} dY${ball.dY.toFixed(3)}`;
+				msg += addMsg;
+			}
+			gElStatus.textContent = msg;
+		}
+
+
+		function vert_text(txt, x, y) {
+			gCtxt.fillStyle = "#D0D0D0";
+			yD = gCtxt.measureText('8').width*2;
+			for(i in txt) {
+				gCtxt.strokeText(txt[i], x, y);
+				y += yD;
+			}
+		}
+
+
+		function display_zones() {
+			gCtxt.font = gZone.font;
+			if (gZone.type > 0) {
+				gZone.t2l -= 1;
+				if (gZone.t2l < 0) {
+					gZone.type = ZONE_NONE;
+					return;
+				}
+				if (gZone.type === ZONE_POINTS) {
+					gCtxt.fillStyle = "#208020";
+					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text("POINTS", gZone.xm, 40);
+				}
+				if (gZone.type === ZONE_SLOW) {
+					gCtxt.fillStyle = "#F080F0";
+					gCtxt.fillRect(gZone.x1, 0, gZone.w, gElCanvas.height);
+					vert_text("SLOW", gZone.xm, 40);
+				}
+			}
+		}
+
+
+		function display_me() {
+			//gCtxt.fillStyle = "#20D0D0";
+			gCtxt.fillStyle = "#20D0D080";
+			gCtxt.fillRect(0, 0, gElCanvas.width, gElCanvas.height);
+			display_zones();
+			if (user.repeat === 0)
+				gCtxt.fillStyle = "#D0D020";
+			else
+				gCtxt.fillStyle = "#802020";
+			gCtxt.fillRect(ball.x-ball.xAdj, ball.y, ball.w, ball.h);
+			gCtxt.fillStyle = "#202020";
+			gCtxt.fillRect(paddle.x-paddle.xAdj, paddle.y, paddle.w, paddle.h);
+			window.requestAnimationFrame(next_frame);
+		}
+
+
+		function arc_out(cb) {
+			gCtxt.beginPath()
+			gCtxt.arc(ball.x,ball.y,gArcRad,0,3.14,true);
+			gArcRad += 1;
+			gCtxt.fillStyle=`rgb( ${Math.random()*256}, ${Math.random()*256}, ${Math.random()*256})`;
+			gCtxt.fill()
+			if (gArcRad > 100) {
+				if (cb) return cb();
+			}
+			window.requestAnimationFrame(arc_out.bind(null, cb));
+		}
+
+
+		function zone_maybe() {
+			let randomChance = Math.random();
+			if (randomChance > 0.5) {
+				gZone.type = ZONE_POINTS;
+			} else if (randomChance < 0.2) {
+				gZone.type = ZONE_SLOW;
+			} else {
+				gZone.type = ZONE_NONE;
+			}
+			if (gZone.type !== ZONE_NONE) {
+				gZone.xm = Math.random()*gElCanvas.width;
+				gZone.x1 = gZone.xm - (gZone.w/2);
+				gZone.x2 = gZone.xm + (gZone.w/2);
+				gZone.t2l = ZONE_TIME2LIVE;
+			}
+		}
+
+
+		function next_level() {
+			ball.dX = 0.5 - Math.random();
+			user.points += POINTS_NEXTLEVEL;
+			POINTS_NEXTLEVEL *= 2;
+			POINTS_NORMAL += 1;
+			user.level += 1;
+			update_status("NextLevel, Run kid run...");
+			ball.dY *= (1 + (0.3*Math.pow(0.94,user.level)));
+			user.repeat = LAZY_REPEAT;
+			zone_maybe();
+		}
+
+
+		function shadow_on() {
+			gCtxt.shadowOffsetX = 2;
+			gCtxt.shadowOffsetY = 2;
+			gCtxt.shadowBlur = 2;
+			gCtxt.shadowColor = "rgba(0,0,0,0.5)";
+		}
+
+
+		function shadow_off() {
+			gCtxt.shadowColor = "rgba(0,0,0,0)";
+		}
+
+
+		function game_over_user() {
+			prevHighScore = localStorage.r1;
+			if (prevHighScore === undefined)
+				prevHighScore = 0;
+			else
+				prevHighScore = Number(prevHighScore);
+			shadow_on();
+			if (prevHighScore < user.points) {
+				gCtxt.fillText(`Congrats, you bettered PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
+				localStorage.r1 = user.points;
+			} else {
+				gCtxt.fillText(`Better luck next time, PrevHigh: ${prevHighScore}`, 10, gElCanvas.height/2);
+			}
+			gGameRunning = false;
+		}
+
+
+		function game_over() {
+			update_status(`Oops:Dropped the ball ${Math.round(bD)}, refresh/dblclick to start over`);
+			window.requestAnimationFrame(arc_out.bind(null, game_over_user));
+		}
+
+
+		function anim_adjust(curATime) {
+			let atDelta = curATime - gPrevATime;
+			if (atDelta === 0) return 0;
+			gPrevATime = curATime;
+			let atMult = atDelta/42; // Aim for around 24 frames per second
+			let rat = (gAvgAnimAdjust - atMult)/gAvgAnimAdjust;
+			if (Math.abs(rat) > 0.60) {
+				gCtxt.save()
+				gCtxt.strokeStyle = "#000";
+				gCtxt.font = "16px monospace";
+				gCtxt.strokeText(`Alert: Experiencing GravityWaves ${gAvgAnimAdjust.toFixed(3)} ${Math.round(rat*100)}%`, 20, 20);
+				gCtxt.restore();
+			}
+			gAvgAnimAdjust = 0.9*gAvgAnimAdjust + 0.1*atMult;
+			if (atMult > 4) return -1;
+			return atMult;
+		}
+
+
+		function next_frame(curATime) {
+			animAdjust = anim_adjust(curATime);
+			if (animAdjust === 0) return;
+			else if (animAdjust < 0) {
+				window.requestAnimationFrame(next_frame);
+				return;
+			}
+			if (animAdjust > 2) animAdjust = 2;
+			ball.y += ball.dY*animAdjust;
+			ball.x += ball.dX*animAdjust;
+			if ((paddle.y - ball.y) < paddle.h) {
+				//update_status("INFO: Ball reached bottom");
+				bD = ball.x - paddle.x;
+				if (Math.abs(bD) > paddle.xAdj) {
+					return game_over();
+				} else {
+					user.points += POINTS_NORMAL;
+					update_status(`INFO:Byalalu, contact established with ball ${Math.round(bD)}`, true);
+					ball.dY = -1*ball.dY;
+					ball.y = paddle.y-paddle.h;
+					bD = Math.round(bD/8)
+					if (bD === 0) {
+						ball.dX = 0;
+						user.repeat -= 1;
+						if (user.repeat == 0) {
+							update_status("ALERT: Meteriot on the way...");
+						}
+						if (user.repeat < 0) {
+							next_level();
+						}
+					} else {
+						user.repeat = LAZY_REPEAT;
+						if (bD > 0) {
+							ball.dX = 0.4;
+						} else {
+							ball.dX = -0.4;
+						}
+					}
+				}
+			}
+			if ((ball.y < 0) && (ball.dY < 0)) {
+				//update_status("INFO: Ball reached top");
+				ball.dY = -1*ball.dY;
+			}
+			if ((ball.x < 0) || (ball.x > gElCanvas.width)) {
+				if (ball.x < 0) ball.x = gElCanvas.width;
+				if (ball.x > gElCanvas.width) ball.x = 0;
+			}
+			if (gZone.type >= 0) {
+				if ((gZone.x1 < ball.x) && (ball.x < gZone.x2)) {
+					if (gZone.type === ZONE_POINTS) {
+						user.points += POINTS_NORMAL;
+						update_status("INFO:PointsAreRaining: lucky you");
+					} else if (gZone.type === ZONE_SLOW) {
+						ball.dY *= Math.pow(0.999999, gZone.t2l);
+						update_status("INFO:Slowing down", true);
+					}
+				}
+			}
+			display_me();
+		}
+
+
+		function move_paddle(loc, force) {
+			var delta = Math.abs((paddle.x - ball.x)/2);
+			if (delta < paddle.minD) delta = paddle.minD;
+			if (loc < gDispMid){
+				paddle.x -= delta;
+				if (paddle.x <= 0) paddle.x = 0;
+			} else {
+				paddle.x += delta;
+				if (paddle.x >= gElCanvas.width) paddle.x = gElCanvas.width;
+			}
+		}
+
+
+		function handle_key(ev) {
+			if (ev.key === "ArrowLeft") {
+				move_paddle(0);
+			} else if (ev.key === "ArrowRight") {
+				move_paddle(gElCanvas.width);
+			}
+		}
+
+
+		function handle_click(ev) {
+			//console.log(ev);
+			move_paddle(ev.offsetX);
+			ev.preventDefault();
+		}
+
+
+		function blackhole_dblclick(ev) {
+			ev.preventDefault();
+			if (gGameRunning === false) {
+				init_me();
+				update_status("New game started");
+			}
+		}
+
+
+		function ball_init() {
+			ball.x = Math.random()*gElCanvas.width;
+			ball.y = 0;
+			ball.xAdj = Math.round(ball.w/2)
+		}
+
+
+		function paddle_init() {
+			paddle.x = Math.random()*gElCanvas.width;
+			paddle.y = gElCanvas.height-10;
+			paddle.xAdj = Math.round(paddle.w/2)
+		}
+
+
+		function zone_init() {
+			ZONE_TIME2LIVE = Math.round(ZONE_TIME2LIVE*(gElCanvas.width/720))
+			gZone.w = gElCanvas.width/10;
+			gZone.font = `${gZone.w*0.3}px monospace`;
+		}
+
+
+		function canvas_init() {
+			gElCanvas.width = window.innerWidth*0.97;
+			let maxHeight = gElCanvas.width*0.66;
+			let possibleHeight = window.innerHeight*0.5;
+			gElCanvas.height = (possibleHeight > maxHeight) ? maxHeight : possibleHeight;
+			gCtxt = gElCanvas.getContext("2d");
+			gDispMid = gElCanvas.width/2;
+		}
+
+
+		function init_me() {
+			init_vars();
+			gPrevATime = performance.now();
+			gElStatus = document.getElementById("status");
+			gElScore = document.getElementById("score");
+			gElCanvas = document.getElementById("canvas");
+			canvas_init();
+			ball_init();
+			paddle_init();
+			zone_init();
+			user.time = new Date();
+			window.onkeydown = handle_key;
+			gElCanvas.onclick = handle_click;
+			gElCanvas.ondblclick = blackhole_dblclick;
+			window.requestAnimationFrame(next_frame);
+		}
+
+
+		document.addEventListener("DOMContentLoaded", (ev) => {
+			init_me();
+		});
+	</script>
+	</body>
+</html>
